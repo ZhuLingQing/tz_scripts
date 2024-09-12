@@ -1,0 +1,6 @@
+.history/
+build/
+logs/
+*.exe
+*.log
+*.bak
