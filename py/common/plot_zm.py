@@ -40,64 +40,50 @@ class plot_zm:
             except:
                 print(f'not found at {self.__ic_num}')
                 break
-
-    def plot_by_imag(self, path = None):
-        plt.figure(figsize=(10, 8))
-        plt.subplot(110 + 1)
+            
+    def __plot_imag(self):
         for index in range(self.__ic_num):
             y = self.__list_imag[index]
             x = self.__list_real[index]
             plt.plot(x,y, label=f'IC{index+1}')
+            plt.xlabel('imag')
+            plt.ylabel('real')
         plt.legend(loc='lower right')
         plt.title(f'real:imag')
+        
+    def __plot_freq(self):
+        for index in range(self.__ic_num):
+            x = self.__list_frequency
+            y = self.__list_real[index]
+            plt.plot(x,y, label=f'IC{index+1}')
+            plt.xlabel('frequency')
+            plt.ylabel('real')
+        plt.legend(loc='lower left')
+        plt.title(f'freq:imag')
+
+    def plot_by_imag(self, path = None):
+        plt.figure(figsize=(10, 8))
+        plt.subplot(110 + 1)
+        self.__plot_imag()
         plt.show()
 
     def plot_by_frequency(self, path = None):
         plt.figure(figsize=(10, 8))
         plt.subplot(110 + 1)
-        for index in range(self.__ic_num):
-            x = self.__list_frequency
-            y = self.__list_real[index]
-            plt.plot(x,y, label=f'IC{index+1}')
-        plt.legend(loc='lower right')
-        plt.title(f'freq:imag')
+        self.__plot_freq()
         plt.show()
 
     def plot(self, path = None):
         plt.figure(figsize=(18, 8))
         plt.subplot(120 + 1)
-        for index in range(self.__ic_num):
-            x = self.__list_imag[index]
-            y = self.__list_real[index]
-            plt.plot(x,y, label=f'IC{index+1}')
-            plt.legend(loc='lower right')
-            plt.title(f'real:imag')
+        self.__plot_imag()
         plt.subplot(120 + 2)
-        for index in range(self.__ic_num):
-            x = self.__list_frequency
-            y = self.__list_real[index]
-            plt.plot(x,y, label=f'IC{index+1}')
-            plt.legend(loc='lower right')
-            plt.title(f'freq:imag')
+        self.__plot_freq()
         plt.show()
 
 two_dimensional_list = []
 if __name__ == "__main__":
     path = os.path.realpath(os.getcwd()) + '\\' + sys.argv[1]
-    # with open(path, newline='') as csvfile:
-    #     csv_reader = csv.reader(csvfile)
-    #     for row in csv_reader:
-    #         two_dimensional_list.append(row)
-    #     try:
-    #         xxx = two_dimensional_list[0].index('xxx')
-    #         print(f'xxx@{xxx}: ')
-    #     except:
-    #         print(f'xxx not in list')
-    #     frequency_idx = two_dimensional_list[0].index('Frequency')
-    #     print(f'Frequency@{frequency_idx}: ', end='')
-    #     for row in two_dimensional_list[1:]:
-    #         print(f'{row[frequency_idx]}, ', end='')
-    #     print('')
     pl = plot_zm(path)
     # pl.plot_by_imag()
     # pl.plot_by_frequency()
