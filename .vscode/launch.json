@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Debug with Args",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "args": [".\\py\\test_data\\2024-11-08 18.22.33.ZM_8IC_1.csv"],
+            "env": {
+                "MY_ENV_VAR": "value"
+            },
+            "console": "integratedTerminal"
+        }
+    ]
+}
