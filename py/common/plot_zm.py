@@ -38,7 +38,7 @@ class plot_zm:
                 self.__list_imag.append(list_imag)
                 self.__ic_num += 1
             except:
-                print(f'not found at {self.__ic_num}')
+                print(f'found {self.__ic_num} ICs')
                 break
             
     def __plot_imag(self):
@@ -83,9 +83,10 @@ class plot_zm:
 
 two_dimensional_list = []
 if __name__ == "__main__":
-    path = os.path.realpath(os.getcwd()) + '\\' + sys.argv[1]
+    if sys.argv[1][1] == ':':
+        path = sys.argv[1]
+    else:
+        path = os.path.realpath(os.getcwd()) + '\\' + sys.argv[1]
     pl = plot_zm(path)
-    # pl.plot_by_imag()
-    # pl.plot_by_frequency()
     pl.plot()
     print('done')
