@@ -91,7 +91,7 @@ if __name__ == "__main__":
         print("arg1: csv in path")
         print("arg2: csv out path")
     l_data = AveragedList.CsvToList(GetRealPath(sys.argv[1]), delFunc=AveragedList.del1stLast)
-    al = AveragedList(['Temperature', 'Voltage'])
+    al = AveragedList(['Voltage', 'Temperature'])
     data = al.MakeAverage(l_data)
     if len(sys.argv) > 2:
         path = GetRealPath(sys.argv[2])
