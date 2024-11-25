@@ -6,7 +6,7 @@
             "type": "python",
             "request": "launch",
             "program": "${file}",
-            "args": [".\\py\\test_data\\vt_out.csv"],
+            "args": [".\\py\\test_data\\vt_out.csv", ".\\py\\test_data"],
             "env": {
                 "MY_ENV_VAR": "value"
             },

@@ -9,6 +9,7 @@ import csv
 class plot_vt:
     def __init__(self, path):
         self.__path = path
+        self.dpi = 150
         self.__get_basic_data(path)
         self.__get_ic_num()
         
@@ -83,92 +84,54 @@ class plot_vt:
             ref = trans_draw[self.__title.index('Tref1')]
             diff_y = [a - b for a, b in zip(y_curve, ref)]
             plt.plot(x_curve, diff_y, label=y)
-            plt.xlabel(x)
+            # plt.xlabel(x)
             plt.ylabel(y)
+        plt.locator_params(axis='x', nbins=len(x_curve))
         plt.legend(loc='upper center')
         plt.title(x)
         
-    def plot_one(self, keyword):
+    def plot_one(self, keyword:str, path:str):
         plt.figure(figsize=(18, 16))
         for i in range(self.__ic_num):
             plt.subplot(4, 4, i + 1)
             yl = [f'Tdm_IC{i + 1}', f'Tdg_IC{i + 1}', f'Tcm_IC{i + 1}', f'Tcg_IC{i + 1}']
             self.plot_sub(kw=keyword, x='Temperature', y_list=yl)
         plt.suptitle(keyword)
-        plt.show()
+        # plt.show()
+        if path is None: plt.show()
+        else: 
+            path_name = f'{path}\\{keyword}.png'
+            plt.savefig(path_name, dpi=self.dpi)
+            print(f"save to: {path_name}")
 
     def plot(self, path = None):
         for kw in self.__dict_data:
-            self.plot_one(kw)
-        
-    #     self.__record_num = len(self.__keyword_list)
-    #     self.__list_real = []
-    #     self.__list_imag = []
-    #     self.__ic_num = 0
-    #     while True:
-    #         try:
-    #             real_index = self.__list_data[0].index(f'Zreal_IC{self.__ic_num + 1}')
-    #             imag_index = self.__list_data[0].index(f'Zimag_IC{self.__ic_num + 1}')
-    #             list_real = []
-    #             list_imag = []
-    #             for i in range(self.__record_num):
-    #                 list_real.append(float(self.__list_data[i + 1][real_index]))
-    #                 list_imag.append(float(self.__list_data[i + 1][imag_index]))
-    #             self.__list_real.append(list_real)
-    #             self.__list_imag.append(list_imag)
-    #             self.__ic_num += 1
-    #         except:
-    #             print(f'found {self.__ic_num} ICs')
-    #             break
+            self.plot_one(kw, path)
             
-    # def __plot_imag(self):
-    #     for index in range(self.__ic_num):
-    #         y = self.__list_imag[index]
-    #         x = self.__list_real[index]
-    #         plt.plot(x,y, label=f'IC{index+1}')
-    #         plt.xlabel('imag')
-    #         plt.ylabel('real')
-    #     plt.legend(loc='lower right')
-    #     plt.title(f'real:imag')
-        
-    # def __plot_freq(self):
-    #     for index in range(self.__ic_num):
-    #         x = self.__list_frequency
-    #         y = self.__list_real[index]
-    #         plt.plot(x,y, label=f'IC{index+1}')
-    #         plt.xlabel('frequency')
-    #         plt.ylabel('real')
-    #     plt.legend(loc='lower left')
-    #     plt.title(f'freq:imag')
-
-    # def plot_by_imag(self, path = None):
-    #     plt.figure(figsize=(10, 8))
-    #     plt.subplot(110 + 1)
-    #     self.__plot_imag()
-    #     plt.show()
-
-    # def plot_by_frequency(self, path = None):
-    #     plt.figure(figsize=(10, 8))
-    #     plt.subplot(110 + 1)
-    #     self.__plot_freq()
-    #     plt.show()
-
-    # def plot(self, path = None):
-    #     plt.figure(figsize=(18, 8))
-    #     plt.subplot(120 + 1)
-    #     self.__plot_imag()
-    #     plt.subplot(120 + 2)
-    #     self.__plot_freq()
-    #     plt.show()
+            
+def get_path(path:str):
+    if path[1] == ':':
+        return path
+    else:
+        return os.path.realpath(os.getcwd()) + '\\' + path
 
 two_dimensional_list = []
 if __name__ == "__main__":
-    if sys.argv[1][1] == ':':
-        path = sys.argv[1]
-    else:
-        path = os.path.realpath(os.getcwd()) + '\\' + sys.argv[1]
-    pl = plot_vt(path)
+    if len(sys.argv) == 1:
+        print("arg1: input csv")
+        print("arg2: output image path")
+        sys.exit(1)
+    ipath = get_path(sys.argv[1])
+    opath = None
+    if len(sys.argv) >= 3:
+        opath = get_path(sys.argv[2])
+        if not os.path.exists(opath):
+            print(f'{opath} not exist.')
+            sys.exit(1)
+        if os.path.isfile(opath):
+            print(f'{opath} is a file, it should be a path.')
+            sys.exit(1)
+    pl = plot_vt(ipath)
     pl.parse(keyword='Voltage')
-    # pl.print()
-    pl.plot()
+    pl.plot(opath)
     print('done')
