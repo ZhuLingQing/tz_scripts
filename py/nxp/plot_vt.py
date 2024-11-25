@@ -12,7 +12,7 @@ class plot_vt:
         self.__get_basic_data(path)
         self.__get_ic_num()
         
-    def __get_basic_data(self, path):
+    def __get_basic_data(self, path:str):
         self.__list_data = []
         self.__title = None
         with open(path, newline='') as csvfile:
@@ -75,7 +75,7 @@ class plot_vt:
         return [list(row) for row in zip(*lst)]
             
     def plot_sub(self, kw:str, x:str, y_list:list):
-        to_draw = self.__dict_data[kw]
+        to_draw = sorted(self.__dict_data[kw], key=lambda _x: _x[self.__title.index(x)])
         trans_draw = self.transpose_2d_list(to_draw)
         x_curve = trans_draw[self.__title.index(x)]
         for y in y_list:
