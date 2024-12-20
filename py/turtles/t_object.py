@@ -3,7 +3,9 @@ from turtle import *
 
 class tObject(Turtle):
     initiated = False
-    on_click_event = []
+    onClickEvent = []
+    preEvent = None
+    postEvent = None
     def __init__(self, color:str = 'black', bgColor:str = 'white', origin = Vec2D(0, 0), size = None):
         super().__init__()
         self.Factory()
@@ -61,20 +63,28 @@ class tObject(Turtle):
         self.up()
         turtle.update()
         self.color(self.color)
+        
+    def Undo(self):
+        self.undo()
 
     @staticmethod
     def RegistEventObj(obj):
-        tObject.on_click_event.append(obj)
+        tObject.onClickEvent.append(obj)
         
     @staticmethod
     def OnClickEvent(x, y):
-        for obj in tObject.on_click_event:
+        if tObject.preEvent is not None:
+            tObject.preEvent()
+        for obj in tObject.onClickEvent:
             if obj.topLeft[0] <= x <= obj.btmRight[0] and obj.btmRight[1] <= y <= obj.topLeft[1]:
                 obj.OnClicked()
+        if tObject.postEvent is not None:
+            tObject.postEvent()
         
     @staticmethod
-    def Done():
-        # turtle.done()
+    def Done(preEvent = None, postEvent = None):
+        tObject.preEvent = preEvent
+        tObject.postEvent = postEvent
         turtle.mainloop()
         
 class tPolyGon(tObject):
@@ -99,6 +109,15 @@ class tPolyGon(tObject):
         self.GotoOrigin()
         self.down()
         v = Vec2D(self.pos())
+        
+class tBanner(tObject):
+    def __init__(self, color:str = 'black', bgColor:str = 'white', origin = Vec2D(0, 0), size = 50):
+        super().__init__(color, bgColor, origin, size)
+        
+    def Message(self, msg:str):
+        self.Undo()
+        self.GotoOrigin()
+        self.write(msg, font = ("Arial", self.size[0], "bold"))
         
 # class tTriangle(tObject):
 #     def __init__(self, color:str = 'black', bgColor:str = 'white', origin = Vec2D(0, 0), size = Vec2D(0, 0)):

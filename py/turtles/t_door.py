@@ -8,7 +8,7 @@ class tDoor(tObject):
         super().__init__(color = color, bgColor=bgColor, origin=origin, size = size if isinstance(size,Vec2D) or isinstance(size,tuple) else Vec2D(size, size *2))
         self.handleColor = handleColor
         self.handleLeft = handleLeft
-        self.isOpen = False
+        self._isOpen = False
         self.frame_width = self.size[0] / 16
         super().RegistEventObj(self)
         if autoUpdate is True: self.Update()
@@ -65,19 +65,22 @@ class tDoor(tObject):
     def Update(self):
         self.GotoOrigin()
         self._door(fillColor = self.color)
-        if self.isOpen is True:
+        if self._isOpen is True:
             self._frame()
         else:
             self._handle(left = self.handleLeft)
         super().Update()
         
     def Open(self, autoUpdate:bool = True):
-        self.isOpen = True
+        self._isOpen = True
         if autoUpdate is True: self.Update()
         
     def Close(self, autoUpdate:bool = True):
-        self.isOpen = False
+        self._isOpen = False
         if autoUpdate is True: self.Update()
+        
+    def isOpen(self):
+        return self._isOpen
         
     def Erase(self):
         if self.size == Vec2D(0, 0): return
@@ -86,8 +89,9 @@ class tDoor(tObject):
         super().Update()
         
     def OnClicked(self):
-        self.isOpen = not self.isOpen
+        self._isOpen = not self._isOpen
         self.Update()
+        return True
 
 if __name__ == '__main__':
     cor = tCordinate(size=Vec2D(800, 600), tick = 20)
