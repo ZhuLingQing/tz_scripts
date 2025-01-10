@@ -28,8 +28,8 @@ def DoorOpenPostEvent():
                 time.sleep(1)
                 DoorReset()
             else:
-                banner.Message(f"Good luck! You got {score}")
                 score += 1
+                banner.Message(f"Good luck! You got {score}")
                 time.sleep(1)
                 d.Close()
                 ghost_pos = random.randint(0, len(doors) - 1); # print(f"GHOST @{ghost_pos}")
